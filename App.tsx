@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -9,6 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as Location from "expo-location";
+import Fontisto from "@expo/vector-icons/Fontisto";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -17,6 +17,16 @@ export default function App() {
   const [days, setDays] = useState([]);
   const [ok, setOk] = useState(true);
   const API_KEY = "040347aad8eefbe8027a0cb58edd9c93";
+
+  const icons = {
+    Clouds: "cloudy",
+    Clear: "day-sunny",
+    Snow: "snow",
+    Rain: "rains",
+    Drizzle: "rain",
+    Thunderstorm: "lightning",
+    Atmosphere: "cloudy-gusts",
+  };
 
   const getWeather = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
@@ -70,9 +80,26 @@ export default function App() {
         ) : (
           days.map((day, index) => (
             <View style={styles.day} key={index}>
-              <Text style={styles.temp}>
-                {parseFloat(day.main.temp).toFixed(1)}
-              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  width: "100%",
+
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                }}
+              >
+                <Text style={styles.temp}>
+                  {parseFloat(day.main.temp).toFixed(1)}
+                </Text>
+                <Fontisto
+                  name={icons[day.weather[0].main]}
+                  size={68}
+                  color="white"
+                />
+              </View>
               <Text style={styles.description}>{day.weather[0].main}</Text>
               <Text style={styles.tinyText}>{day.weather[0].description}</Text>
             </View>
@@ -93,22 +120,25 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 68,
     fontWeight: "500",
+    color: "white",
   },
   weather: {},
   day: {
     width: SCREEN_WIDTH,
-    alignItems: "center",
   },
   temp: {
-    marginTop: 50,
-    fontSize: 178,
+    fontSize: 118,
+    color: "white",
   },
   description: {
-    marginTop: -30,
-    fontSize: 60,
-    textAlign: "center",
+    marginTop: -20,
+    fontSize: 40,
+    paddingLeft: 10,
+    color: "white",
   },
   tinyText: {
     fontSize: 20,
+    paddingLeft: 10,
+    color: "white",
   },
 });
